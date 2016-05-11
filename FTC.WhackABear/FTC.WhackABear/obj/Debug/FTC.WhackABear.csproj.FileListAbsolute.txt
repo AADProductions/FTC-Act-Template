@@ -1,0 +1,5 @@
+G:\Projects\FTC-Act-Template\Assets\Scripts\CoreScripts\Plugins\FTC.WhackABear.dll
+G:\Projects\FTC-Act-Template\Assets\Scripts\CoreScripts\Plugins\FTC.WhackABear.pdb
+G:\Projects\FTC-Act-Template\FTC.WhackABear\FTC.WhackABear\obj\Debug\FTC.WhackABear.csprojResolveAssemblyReference.cache
+G:\Projects\FTC-Act-Template\FTC.WhackABear\FTC.WhackABear\obj\Debug\FTC.WhackABear.dll
+G:\Projects\FTC-Act-Template\FTC.WhackABear\FTC.WhackABear\obj\Debug\FTC.WhackABear.pdb

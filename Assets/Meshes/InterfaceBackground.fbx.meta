@@ -1,0 +1,800 @@
+fileFormatVersion: 2
+guid: 1873fd0f101269e4c81c977b41f2a4c3
+timeCreated: 1448306413
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Chair
+    100004: Knife
+    100006: WhipHandle
+    100008: WhipBall
+    100010: Balancer
+    100012: BallAndChainBall
+    100014: BallAndChainHandle
+    100016: Parasol
+    100018: BalanceBall
+    100020: BalancerSmall
+    100022: AudienceMember
+    100024: ScoreHammer
+    100026: NextPlayerText
+    100028: NextPlayerText_MeshPart0
+    100030: NextPlayerText_MeshPart1
+    100032: Player1
+    100034: Player2
+    100036: Player3
+    100038: Player4
+    100040: PressTriggersWhenReady
+    100042: PressTriggersWhenReady_MeshPart0
+    100044: PressTriggersWhenReady_MeshPart1
+    100046: NextPlayerText1
+    100048: NextPlayerText2
+    100050: NextPlayerText3
+    100052: NextPlayerText4
+    100054: PressTriggersWhenReady1
+    100056: PressTriggersWhenReady2
+    100058: PressTriggersWhenReady3
+    100060: PressTriggersWhenReady4
+    100062: Balloon
+    100064: BalloonPopped
+    100066: KnifePad
+    100068: Texture Group
+    100070: KnifePadCollider
+    100072: FeetWheel
+    100074: FeetWheel 1
+    100076: Gumball
+    100078: LionBody
+    100080: LionChassis
+    100082: LionHead
+    100084: LionPatform1
+    100086: LionTrack1
+    100088: StageMesh1
+    100090: Gumball1
+    100092: Gumball2
+    100094: Gumball3
+    100096: Gumball4
+    100098: Gumball5
+    100100: Gumball6
+    100102: Gumball7
+    100104: Gumball8
+    100106: Gumball9
+    100108: Gumballs
+    100110: LionEyes
+    100112: LionEyes 1
+    100114: LionFoot
+    100116: LionFoot 1
+    100118: LionFoot 2
+    100120: LionFoot 3
+    100122: LionJaw
+    100124: LionSparkThrower
+    100126: Mesh
+    100128: Arrow
+    100130: TakeABow
+    100132: CandyLink1
+    100134: CandyLink2
+    100136: CandyLink3
+    100138: CandyLink4
+    100140: CandyLink5
+    100142: CandyLink6
+    100144: CandyLink7
+    100146: CandyLink8
+    100148: CandyLinks
+    100150: Matchstick
+    100152: KnifeBlade
+    100154: TakeABow_MeshPart0
+    100156: TakeABow_MeshPart1
+    100158: TakeABow1
+    100160: TakeABow2
+    100162: Olive
+    100164: Pin
+    100166: PinBlade
+    100168: Hide
+    100170: PinBall
+    100172: PinballTops
+    100174: Can
+    100176: Flyswatter
+    100178: ParasolBottom
+    100180: Curtains
+    100182: SmallestShowOnEarth
+    100184: 'Texture Group '
+    100186: BlockA
+    100188: BlockB
+    100190: BlockC
+    100192: BlockD
+    100194: BlockE
+    100196: BlockF
+    100198: PlayingCard
+    100200: Launcher
+    100202: Marble1
+    100204: CattleProd
+    100206: Mane1
+    100208: Mane2
+    100210: Mane3
+    100212: Target1
+    100214: Target1 1
+    100216: Target1 2
+    100218: Target1 3
+    100220: Target1 4
+    100222: Target1 5
+    100224: Target1 6
+    100226: Targets
+    100228: Mane1Collider1
+    100230: Mane1Collider2
+    100232: Mane1Collider3
+    100234: Mane1Collider4
+    100236: InterfaceBackground
+    100238: Thimble
+    100240: BabyTomato
+    100242: RulerWithHoles
+    100244: BabyTomatoChunk
+    100246: BabyTomatoSeed
+    100248: PaperRose
+    100250: Newspaper
+    100252: Battery
+    100254: ChairDamaged1
+    100256: ChairDamaged2
+    100258: MiniFlag
+    100260: BonusFlagSmall
+    100262: SlotMachine
+    100264: SlotMachineBoard1
+    100266: SlotMachineBoard1 1
+    100268: SlotMachineBoard1 2
+    100270: SlotMachineBoard1 3
+    100272: SlotMachineBoard1 4
+    100274: SlotMachineRing1
+    100276: SlotMachineRing1 1
+    100278: SlotMachineRing1 2
+    100280: SlotMachineRing1 3
+    100282: SlotMachineRing1 4
+    100284: SlotMachineAxle
+    100286: SlotMachineArrow
+    100288: SlotMachineInner
+    100290: SlotMachineLED
+    100292: SlotMachineLid
+    100294: SlotMachineTop
+    100296: SlotMachineSpinnyTop
+    400000: //RootNode
+    400002: Chair
+    400004: Knife
+    400006: WhipHandle
+    400008: WhipBall
+    400010: Balancer
+    400012: BallAndChainBall
+    400014: BallAndChainHandle
+    400016: Parasol
+    400018: BalanceBall
+    400020: BalancerSmall
+    400022: AudienceMember
+    400024: ScoreHammer
+    400026: NextPlayerText
+    400028: NextPlayerText_MeshPart0
+    400030: NextPlayerText_MeshPart1
+    400032: Player1
+    400034: Player2
+    400036: Player3
+    400038: Player4
+    400040: PressTriggersWhenReady
+    400042: PressTriggersWhenReady_MeshPart0
+    400044: PressTriggersWhenReady_MeshPart1
+    400046: NextPlayerText1
+    400048: NextPlayerText2
+    400050: NextPlayerText3
+    400052: NextPlayerText4
+    400054: PressTriggersWhenReady1
+    400056: PressTriggersWhenReady2
+    400058: PressTriggersWhenReady3
+    400060: PressTriggersWhenReady4
+    400062: Balloon
+    400064: BalloonPopped
+    400066: KnifePad
+    400068: Texture Group
+    400070: KnifePadCollider
+    400072: FeetWheel
+    400074: FeetWheel 1
+    400076: Gumball
+    400078: LionBody
+    400080: LionChassis
+    400082: LionHead
+    400084: LionPatform1
+    400086: LionTrack1
+    400088: StageMesh1
+    400090: Gumball1
+    400092: Gumball2
+    400094: Gumball3
+    400096: Gumball4
+    400098: Gumball5
+    400100: Gumball6
+    400102: Gumball7
+    400104: Gumball8
+    400106: Gumball9
+    400108: Gumballs
+    400110: LionEyes
+    400112: LionEyes 1
+    400114: LionFoot
+    400116: LionFoot 1
+    400118: LionFoot 2
+    400120: LionFoot 3
+    400122: LionJaw
+    400124: LionSparkThrower
+    400126: Mesh
+    400128: Arrow
+    400130: TakeABow
+    400132: CandyLink1
+    400134: CandyLink2
+    400136: CandyLink3
+    400138: CandyLink4
+    400140: CandyLink5
+    400142: CandyLink6
+    400144: CandyLink7
+    400146: CandyLink8
+    400148: CandyLinks
+    400150: Matchstick
+    400152: KnifeBlade
+    400154: TakeABow_MeshPart0
+    400156: TakeABow_MeshPart1
+    400158: TakeABow1
+    400160: TakeABow2
+    400162: Olive
+    400164: Pin
+    400166: PinBlade
+    400168: Hide
+    400170: PinBall
+    400172: PinballTops
+    400174: Can
+    400176: Flyswatter
+    400178: ParasolBottom
+    400180: Curtains
+    400182: SmallestShowOnEarth
+    400184: 'Texture Group '
+    400186: BlockA
+    400188: BlockB
+    400190: BlockC
+    400192: BlockD
+    400194: BlockE
+    400196: BlockF
+    400198: PlayingCard
+    400200: Launcher
+    400202: Marble1
+    400204: CattleProd
+    400206: Mane1
+    400208: Mane2
+    400210: Mane3
+    400212: Target1
+    400214: Target1 1
+    400216: Target1 2
+    400218: Target1 3
+    400220: Target1 4
+    400222: Target1 5
+    400224: Target1 6
+    400226: Targets
+    400228: Mane1Collider1
+    400230: Mane1Collider2
+    400232: Mane1Collider3
+    400234: Mane1Collider4
+    400236: InterfaceBackground
+    400238: Thimble
+    400240: BabyTomato
+    400242: RulerWithHoles
+    400244: BabyTomatoChunk
+    400246: BabyTomatoSeed
+    400248: PaperRose
+    400250: Newspaper
+    400252: Battery
+    400254: ChairDamaged1
+    400256: ChairDamaged2
+    400258: MiniFlag
+    400260: BonusFlagSmall
+    400262: SlotMachine
+    400264: SlotMachineBoard1
+    400266: SlotMachineBoard1 1
+    400268: SlotMachineBoard1 2
+    400270: SlotMachineBoard1 3
+    400272: SlotMachineBoard1 4
+    400274: SlotMachineRing1
+    400276: SlotMachineRing1 1
+    400278: SlotMachineRing1 2
+    400280: SlotMachineRing1 3
+    400282: SlotMachineRing1 4
+    400284: SlotMachineAxle
+    400286: SlotMachineArrow
+    400288: SlotMachineInner
+    400290: SlotMachineLED
+    400292: SlotMachineLid
+    400294: SlotMachineTop
+    400296: SlotMachineSpinnyTop
+    2300000: //RootNode
+    2300002: Chair
+    2300004: Knife
+    2300006: WhipBall
+    2300008: BallAndChainBall
+    2300010: BallAndChainHandle
+    2300012: Parasol
+    2300014: BalanceBall
+    2300016: Balancer
+    2300018: BalancerSmall
+    2300020: AudienceMember
+    2300022: ScoreHammer
+    2300024: NextPlayerText_MeshPart0
+    2300026: NextPlayerText_MeshPart1
+    2300028: Player1
+    2300030: Player2
+    2300032: Player3
+    2300034: Player4
+    2300036: PressTriggersWhenReady_MeshPart0
+    2300038: PressTriggersWhenReady_MeshPart1
+    2300040: NextPlayerText1
+    2300042: NextPlayerText2
+    2300044: NextPlayerText3
+    2300046: NextPlayerText4
+    2300048: PressTriggersWhenReady1
+    2300050: PressTriggersWhenReady2
+    2300052: PressTriggersWhenReady3
+    2300054: PressTriggersWhenReady4
+    2300056: Balloon
+    2300058: BalloonPopped
+    2300060: KnifePad
+    2300062: KnifePadCollider
+    2300064: FeetWheel
+    2300066: FeetWheel 1
+    2300068: Gumball
+    2300070: LionBody
+    2300072: LionChassis
+    2300074: LionHead
+    2300076: LionPatform1
+    2300078: LionTrack1
+    2300080: StageMesh1
+    2300082: Gumball1
+    2300084: Gumball2
+    2300086: Gumball3
+    2300088: Gumball4
+    2300090: Gumball5
+    2300092: Gumball6
+    2300094: Gumball7
+    2300096: Gumball8
+    2300098: Gumball9
+    2300100: LionEyes
+    2300102: LionEyes 1
+    2300104: LionFoot
+    2300106: LionFoot 1
+    2300108: LionFoot 2
+    2300110: LionFoot 3
+    2300112: LionJaw
+    2300114: LionSparkThrower
+    2300116: Mesh
+    2300118: Arrow
+    2300120: TakeABow
+    2300122: CandyLink1
+    2300124: CandyLink2
+    2300126: CandyLink3
+    2300128: CandyLink4
+    2300130: CandyLink5
+    2300132: CandyLink6
+    2300134: CandyLink7
+    2300136: CandyLink8
+    2300138: WhipHandle
+    2300140: Matchstick
+    2300142: KnifeBlade
+    2300144: TakeABow_MeshPart0
+    2300146: TakeABow_MeshPart1
+    2300148: TakeABow1
+    2300150: TakeABow2
+    2300152: Olive
+    2300154: Pin
+    2300156: PinBlade
+    2300158: PinBall
+    2300160: PinballTops
+    2300162: Can
+    2300164: Flyswatter
+    2300166: ParasolBottom
+    2300168: Curtains
+    2300170: PressTriggersWhenReady
+    2300172: SmallestShowOnEarth
+    2300174: BlockA
+    2300176: BlockB
+    2300178: BlockC
+    2300180: BlockD
+    2300182: BlockE
+    2300184: BlockF
+    2300186: PlayingCard
+    2300188: Launcher
+    2300190: Marble1
+    2300192: CattleProd
+    2300194: Mane1
+    2300196: Mane2
+    2300198: Mane3
+    2300200: Target1
+    2300202: Target1 1
+    2300204: Target1 2
+    2300206: Target1 3
+    2300208: Target1 4
+    2300210: Target1 5
+    2300212: Target1 6
+    2300214: Targets
+    2300216: Mane1Collider1
+    2300218: Mane1Collider2
+    2300220: Mane1Collider3
+    2300222: Mane1Collider4
+    2300224: InterfaceBackground
+    2300226: Thimble
+    2300228: RulerWithHoles
+    2300230: BabyTomato
+    2300232: BabyTomatoChunk
+    2300234: BabyTomatoSeed
+    2300236: PaperRose
+    2300238: Newspaper
+    2300240: Battery
+    2300242: ChairDamaged1
+    2300244: ChairDamaged2
+    2300246: MiniFlag
+    2300248: BonusFlagSmall
+    2300250: SlotMachine
+    2300252: SlotMachineBoard1
+    2300254: SlotMachineBoard1 1
+    2300256: SlotMachineBoard1 2
+    2300258: SlotMachineBoard1 3
+    2300260: SlotMachineBoard1 4
+    2300262: SlotMachineRing1
+    2300264: SlotMachineRing1 1
+    2300266: SlotMachineRing1 2
+    2300268: SlotMachineRing1 3
+    2300270: SlotMachineRing1 4
+    2300272: SlotMachineAxle
+    2300274: SlotMachineArrow
+    2300276: SlotMachineInner
+    2300278: SlotMachineLED
+    2300280: SlotMachineLid
+    2300282: SlotMachineTop
+    2300284: SlotMachineSpinnyTop
+    3300000: //RootNode
+    3300002: Chair
+    3300004: Knife
+    3300006: WhipBall
+    3300008: BallAndChainBall
+    3300010: BallAndChainHandle
+    3300012: Parasol
+    3300014: BalanceBall
+    3300016: Balancer
+    3300018: BalancerSmall
+    3300020: AudienceMember
+    3300022: ScoreHammer
+    3300024: NextPlayerText_MeshPart0
+    3300026: NextPlayerText_MeshPart1
+    3300028: Player1
+    3300030: Player2
+    3300032: Player3
+    3300034: Player4
+    3300036: PressTriggersWhenReady_MeshPart0
+    3300038: PressTriggersWhenReady_MeshPart1
+    3300040: NextPlayerText1
+    3300042: NextPlayerText2
+    3300044: NextPlayerText3
+    3300046: NextPlayerText4
+    3300048: PressTriggersWhenReady1
+    3300050: PressTriggersWhenReady2
+    3300052: PressTriggersWhenReady3
+    3300054: PressTriggersWhenReady4
+    3300056: Balloon
+    3300058: BalloonPopped
+    3300060: KnifePad
+    3300062: KnifePadCollider
+    3300064: FeetWheel
+    3300066: FeetWheel 1
+    3300068: Gumball
+    3300070: LionBody
+    3300072: LionChassis
+    3300074: LionHead
+    3300076: LionPatform1
+    3300078: LionTrack1
+    3300080: StageMesh1
+    3300082: Gumball1
+    3300084: Gumball2
+    3300086: Gumball3
+    3300088: Gumball4
+    3300090: Gumball5
+    3300092: Gumball6
+    3300094: Gumball7
+    3300096: Gumball8
+    3300098: Gumball9
+    3300100: LionEyes
+    3300102: LionEyes 1
+    3300104: LionFoot
+    3300106: LionFoot 1
+    3300108: LionFoot 2
+    3300110: LionFoot 3
+    3300112: LionJaw
+    3300114: LionSparkThrower
+    3300116: Mesh
+    3300118: Arrow
+    3300120: TakeABow
+    3300122: CandyLink1
+    3300124: CandyLink2
+    3300126: CandyLink3
+    3300128: CandyLink4
+    3300130: CandyLink5
+    3300132: CandyLink6
+    3300134: CandyLink7
+    3300136: CandyLink8
+    3300138: WhipHandle
+    3300140: Matchstick
+    3300142: KnifeBlade
+    3300144: TakeABow_MeshPart0
+    3300146: TakeABow_MeshPart1
+    3300148: TakeABow1
+    3300150: TakeABow2
+    3300152: Olive
+    3300154: Pin
+    3300156: PinBlade
+    3300158: PinBall
+    3300160: PinballTops
+    3300162: Can
+    3300164: Flyswatter
+    3300166: ParasolBottom
+    3300168: Curtains
+    3300170: PressTriggersWhenReady
+    3300172: SmallestShowOnEarth
+    3300174: BlockA
+    3300176: BlockB
+    3300178: BlockC
+    3300180: BlockD
+    3300182: BlockE
+    3300184: BlockF
+    3300186: PlayingCard
+    3300188: Launcher
+    3300190: Marble1
+    3300192: CattleProd
+    3300194: Mane1
+    3300196: Mane2
+    3300198: Mane3
+    3300200: Target1
+    3300202: Target1 1
+    3300204: Target1 2
+    3300206: Target1 3
+    3300208: Target1 4
+    3300210: Target1 5
+    3300212: Target1 6
+    3300214: Targets
+    3300216: Mane1Collider1
+    3300218: Mane1Collider2
+    3300220: Mane1Collider3
+    3300222: Mane1Collider4
+    3300224: InterfaceBackground
+    3300226: Thimble
+    3300228: RulerWithHoles
+    3300230: BabyTomato
+    3300232: BabyTomatoChunk
+    3300234: BabyTomatoSeed
+    3300236: PaperRose
+    3300238: Newspaper
+    3300240: Battery
+    3300242: ChairDamaged1
+    3300244: ChairDamaged2
+    3300246: MiniFlag
+    3300248: BonusFlagSmall
+    3300250: SlotMachine
+    3300252: SlotMachineBoard1
+    3300254: SlotMachineBoard1 1
+    3300256: SlotMachineBoard1 2
+    3300258: SlotMachineBoard1 3
+    3300260: SlotMachineBoard1 4
+    3300262: SlotMachineRing1
+    3300264: SlotMachineRing1 1
+    3300266: SlotMachineRing1 2
+    3300268: SlotMachineRing1 3
+    3300270: SlotMachineRing1 4
+    3300272: SlotMachineAxle
+    3300274: SlotMachineArrow
+    3300276: SlotMachineInner
+    3300278: SlotMachineLED
+    3300280: SlotMachineLid
+    3300282: SlotMachineTop
+    3300284: SlotMachineSpinnyTop
+    4300000: Knife
+    4300002: Chair
+    4300004: WhipBall
+    4300006: BallAndChainBall
+    4300008: BallAndChainHandle
+    4300010: Parasol
+    4300012: BalanceBall
+    4300014: Balancer
+    4300016: BalancerSmall
+    4300018: AudienceMember
+    4300020: ScoreHammer
+    4300022: NextPlayerText_MeshPart0
+    4300024: NextPlayerText_MeshPart1
+    4300026: Player1
+    4300028: Player2
+    4300030: Player3
+    4300032: Player4
+    4300034: PressTriggersWhenReady_MeshPart0
+    4300036: PressTriggersWhenReady_MeshPart1
+    4300038: NextPlayerText1
+    4300040: PressTriggersWhenReady1
+    4300042: NextPlayerText2
+    4300044: NextPlayerText3
+    4300046: NextPlayerText4
+    4300048: PressTriggersWhenReady2
+    4300050: PressTriggersWhenReady3
+    4300052: PressTriggersWhenReady4
+    4300054: Balloon
+    4300056: BalloonPopped
+    4300058: KnifePad
+    4300060: KnifePadCollider
+    4300062: LionTrack1
+    4300064: LionChassis
+    4300066: LionHead
+    4300068: LionBody
+    4300070: FeetWheel
+    4300072: FeetWheel
+    4300074: LionPatform1
+    4300076: StageMesh1
+    4300078: Gumball
+    4300080: Gumball9
+    4300082: Gumball2
+    4300084: Gumball3
+    4300086: Gumball4
+    4300088: Gumball5
+    4300090: Gumball6
+    4300092: Gumball7
+    4300094: Gumball8
+    4300096: Gumball1
+    4300098: LionFoot
+    4300100: LionFoot
+    4300102: LionFoot
+    4300104: LionFoot
+    4300106: LionSparkThrower
+    4300108: LionEyes
+    4300110: LionJaw
+    4300112: LionEyes
+    4300114: Mesh
+    4300116: TakeABow
+    4300118: Arrow
+    4300120: CandyLink3
+    4300122: CandyLink6
+    4300124: CandyLink7
+    4300126: CandyLink4
+    4300128: CandyLink5
+    4300130: CandyLink8
+    4300132: CandyLink2
+    4300134: CandyLink1
+    4300136: WhipHandle
+    4300138: Matchstick
+    4300140: KnifeBlade
+    4300142: TakeABow_MeshPart0
+    4300144: TakeABow_MeshPart1
+    4300146: TakeABow1
+    4300148: TakeABow2
+    4300150: Olive
+    4300152: Pin
+    4300154: PinBlade
+    4300156: PinBall
+    4300158: PinballTops
+    4300160: Can
+    4300162: Flyswatter
+    4300164: ParasolBottom
+    4300166: PressTriggersWhenReady
+    4300168: SmallestShowOnEarth
+    4300170: Curtains
+    4300172: BlockA
+    4300174: BlockB
+    4300176: BlockC
+    4300178: BlockD
+    4300180: BlockE
+    4300182: BlockF
+    4300184: PlayingCard
+    4300186: Launcher
+    4300188: Marble1
+    4300190: Targets
+    4300192: Target1
+    4300194: Target1
+    4300196: Target1
+    4300198: Target1
+    4300200: Target1
+    4300202: Target1
+    4300204: Target1
+    4300206: Mane1
+    4300208: Mane2
+    4300210: Mane3
+    4300212: CattleProd
+    4300214: Mane1Collider4
+    4300216: Mane1Collider3
+    4300218: Mane1Collider2
+    4300220: Mane1Collider1
+    4300222: InterfaceBackground
+    4300224: Thimble
+    4300226: RulerWithHoles
+    4300228: BabyTomato
+    4300230: BabyTomatoChunk
+    4300232: BabyTomatoSeed
+    4300234: PaperRose
+    4300236: Newspaper
+    4300238: Battery
+    4300240: ChairDamaged1
+    4300242: ChairDamaged2
+    4300244: MiniFlag
+    4300246: BonusFlagSmall
+    4300248: SlotMachine
+    4300250: SlotMachineBoard1
+    4300252: SlotMachineBoard1
+    4300254: SlotMachineBoard1
+    4300256: SlotMachineBoard1
+    4300258: SlotMachineBoard1
+    4300260: SlotMachineRing1
+    4300262: SlotMachineRing1
+    4300264: SlotMachineRing1
+    4300266: SlotMachineRing1
+    4300268: SlotMachineRing1
+    4300270: SlotMachineAxle
+    4300272: SlotMachineLid
+    4300274: SlotMachineInner
+    4300276: SlotMachineTop
+    4300278: SlotMachineArrow
+    4300280: SlotMachineLED
+    4300282: SlotMachineSpinnyTop
+    7400000: modo_Anim
+    9500000: //RootNode
+    11100000: //RootNode
+  materials:
+    importMaterials: 0
+    materialName: 1
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 1
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

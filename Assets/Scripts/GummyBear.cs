@@ -1,0 +1,110 @@
+﻿using UnityEngine;
+using System.Collections;
+using FTC.Interfaces;
+
+public class GummyBear : MonoBehaviour {
+
+	public bool IsMetal = false;
+	public bool IsReady = false;
+	public bool Squashed = false;
+	public float MinCollisionMagnitude = 0.5f;
+	public float MinCollisionDot = 0.5f;
+	public Color BearColor;
+	public Mesh SquashedMesh;
+	public ToyBox ToyBoxParent;
+	public AudioClip MetalBangClip;
+	public AudioClip SquashClip;
+	public AudioClip SqueezeClip;
+	public GameObject ParticleBlobsPrefab;
+	public int PieceIndex;
+	float nextHapticPulseTime;
+	ushort nextHapticPulseScale;
+	Vector3 squashScale = Vector3.one;
+	INVRInteractable interactable;
+
+	public void OnCollisionEnter (Collision collision) {
+		if (Squashed)
+			return;
+
+		bool canSquash = true;
+
+		if (!collision.collider.CompareTag ("Player")) {
+			canSquash = false;
+		}
+
+		interactable = (INVRInteractable) collision.collider.attachedRigidbody.GetComponent (typeof(INVRInteractable));
+		if (interactable == null) {
+			canSquash = false;
+		}
+
+		if (IsMetal) {
+			Clang ();
+			if (interactable.IsAttached) {
+				nextHapticPulseScale += 1200;
+			}
+			return;
+		}
+
+		float collisionMagnitude = collision.relativeVelocity.magnitude;
+		float squashAmount = Mathf.Clamp01 (collisionMagnitude / MinCollisionMagnitude);
+		nextHapticPulseScale += (ushort)Mathf.FloorToInt (1200 * (1f - squashAmount));
+		float dot = Vector3.Dot (collision.contacts [0].normal, Vector3.down);
+		//use the dot to determine how much downward pressure to apply to the scale
+		squashAmount = squashAmount * Mathf.Clamp (dot, 0.25f, 1f);
+		squashScale.y = Mathf.Clamp (squashScale.y - squashAmount, 0.1f, 1f);
+
+		//see if we're hitting from the sides
+		Hammer h = collision.collider.attachedRigidbody.GetComponent <Hammer> ();
+		if (h != null) {
+			float hammerForwardDot = Vector3.Dot (h.ForwardTransform.forward, Vector3.down);
+			float hammerBackDot = Vector3.Dot (h.ForwardTransform.forward, Vector3.down);
+			if (hammerForwardDot < MinCollisionDot && hammerBackDot < MinCollisionDot) {
+				canSquash = false;
+			}
+		}
+
+		if (canSquash && IsReady && collisionMagnitude > MinCollisionMagnitude && dot > MinCollisionDot) {
+			nextHapticPulseScale += 1200;
+			Squash ();
+		}
+	}
+
+	public void Update () {
+		if (nextHapticPulseScale > 0 && Time.time > nextHapticPulseTime) {
+			if (nextHapticPulseScale > 1400) {
+				nextHapticPulseScale = 1400;
+			}
+			Debug.Log ("Triggering haptic pulse: " + nextHapticPulseScale);
+			nextHapticPulseTime = Time.time + 1f / nextHapticPulseScale;
+			if (interactable != null && interactable.IsAttached) {
+				interactable.AttachedHandInterface.TriggerHapticPulse (nextHapticPulseScale);
+				nextHapticPulseScale = 0;
+			}
+		}
+
+		squashScale.x = 1f + ((1f - squashScale.y) * 0.5f);
+		squashScale.z = 1f + ((1f - squashScale.y) * 0.5f);
+		squashScale = Vector3.Lerp (squashScale, Vector3.one, Time.deltaTime * 0.25f);
+		transform.localScale = Vector3.Lerp (transform.localScale, squashScale, Time.deltaTime * 10f);
+	}
+
+	void Clang () {
+		AudioSource.PlayClipAtPoint (MetalBangClip, transform.position);
+	}
+
+	void Squash () {
+		if (Squashed)
+			return;
+
+		GetComponent<Collider> ().enabled = false;
+
+		GameObject blobsGo = GameObject.Instantiate (ParticleBlobsPrefab, transform.position, Quaternion.Euler (-90f, 0f, 0f)) as GameObject;
+		ParticleSystemRenderer r = (ParticleSystemRenderer) blobsGo.GetComponent <Renderer> ();
+		r.material.color = BearColor;
+
+		Squashed = true;
+		AudioSource.PlayClipAtPoint (SquashClip, transform.position);
+		gameObject.GetComponent <MeshFilter> ().sharedMesh = SquashedMesh;
+		ToyBoxParent.OnBearSquashed (this);
+	}
+}

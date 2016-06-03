@@ -23,8 +23,8 @@ namespace FTC.WhackABear
 
 		public void Pop () {
 			GameObject blobsGo = GameObject.Instantiate (ParticleBlobsPrefab, transform.position, Quaternion.Euler (-90f, 0f, 0f)) as GameObject;
-			ParticleSystemRenderer r = (ParticleSystemRenderer)blobsGo.GetComponent <Renderer> ();
-			r.material.color = bearColor;
+			//ParticleSystemRenderer r = (ParticleSystemRenderer)blobsGo.GetComponent <Renderer> ();
+			//r.material.color = bearColor;
 
 			AudioSource a = gameObject.GetComponent <AudioSource> ();
 			a.pitch = Random.Range (0.9f, 1.1f);
@@ -34,7 +34,9 @@ namespace FTC.WhackABear
 
 		public override void OnCollisionEnter (Collision collision)
 		{
-			Selected = true;
+			if (collision.relativeVelocity.magnitude > 0.1f) {
+				Selected = true;
+			}
 		}
 
 		public static void GetColorFromName (string name, out GummyBearColor bearColor, out Color color) {

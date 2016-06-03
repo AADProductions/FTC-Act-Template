@@ -52,6 +52,20 @@ namespace FTC.WhackABear {
 			if (!IsMetal) {
 				transform.localScale = new Vector3 (1f, 0.8f, 1f);
 			}
+
+			//play the wiggly animation and give it a random offset
+			Animation anim = gameObject.GetComponent <Animation> ();
+			if (anim != null) {
+				anim.Play ("GummyBearWiggle");
+				anim ["GummyBearWiggle"].normalizedTime = Random.value;
+			}
+			//play the giggle animation and give it a random offset
+			AudioSource audio = gameObject.GetComponent <AudioSource> ();
+			if (audio != null) {
+				audio.pitch = Random.Range (0.9f, 1.1f);
+				audio.timeSamples = Random.Range (0, audio.clip.samples);
+				audio.Play ();
+			}
 		}
 
 		public override void OnCollisionEnter (Collision collision)
@@ -180,6 +194,12 @@ namespace FTC.WhackABear {
 		{
 			if (Squashed)
 				return;
+
+			Animation anim = gameObject.GetComponent <Animation> ();
+			anim.Stop ();
+			transform.localPosition = Vector3.up * 0.01f;
+			AudioSource audio = gameObject.GetComponent <AudioSource> ();
+			audio.Stop ();
 
 			WhackABearAct act = Act.Current.Script as WhackABearAct;
 			if (act.BearColor == BearColor) {

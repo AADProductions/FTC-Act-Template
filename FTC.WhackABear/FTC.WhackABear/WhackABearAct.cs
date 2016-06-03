@@ -16,6 +16,7 @@ namespace FTC.WhackABear
 		public GameObject SelectionGrid;
 		public GummyBearColor BearColor;
 		public Animation DropBoxesAnimation;
+		public float MetalBearOdds = 0.1f;
 
 		public static string GetName () {
 			return "Whack-A-Bear";
@@ -58,11 +59,43 @@ namespace FTC.WhackABear
 
 		public override IEnumerator ActIntroduceOverTime ()
 		{
-			//turn off toyboxes and selection grid immediately
-			foreach (ToyBox t in ToyBoxes) {
-				t.gameObject.SetActive (false);
-				SelectionGrid.SetActive (false);
+			//turn on the correct boxes
+			//set the score per cheer & score loss speed
+			switch (act.Difficulty) {
+			case ActDifficulty.Easy:
+			default:
+				act.ScorePerCheer = 0.2f;
+				act.ScoreLoseSpeed = 0.0075f;
+				//ToyBoxes [0].gameObject.SetActive (true);
+				ToyBoxes [1].gameObject.SetActive (false);
+				ToyBoxes [2].gameObject.SetActive (false);
+				ToyBoxes [3].gameObject.SetActive (false);
+				ToyBoxes [4].gameObject.SetActive (false);
+				break;
+
+			case ActDifficulty.Medium:
+				act.ScorePerCheer = 0.0925f;
+				act.ScoreLoseSpeed = 0.055f;
+				ToyBoxes [0].gameObject.SetActive (false);
+				ToyBoxes [1].gameObject.SetActive (false);
+				ToyBoxes [2].gameObject.SetActive (false);
+				//ToyBoxes [3].gameObject.SetActive (true);
+				//ToyBoxes [4].gameObject.SetActive (true);
+				break;
+
+			case ActDifficulty.Hard:
+				act.ScorePerCheer = 0.0125f;
+				act.ScoreLoseSpeed = 0.055f;
+				//ToyBoxes [0].gameObject.SetActive (true);
+				//ToyBoxes [1].gameObject.SetActive (true);
+				//ToyBoxes [2].gameObject.SetActive (true);
+				ToyBoxes [3].gameObject.SetActive (false);
+				ToyBoxes [4].gameObject.SetActive (false);
+				break;
 			}
+
+			//turn off selection grid immediately
+			SelectionGrid.SetActive (false);
 
 			//TEMP - disabling magnet for now
 			Magnet.gameObject.SetActive (false);
@@ -71,7 +104,7 @@ namespace FTC.WhackABear
 			Spotlights.Current.SetTargets (new Transform[] { Hammer.transform }, true);
 			//if we're on the hard difficulty
 			//wait for the player to select their hammer color
-			if (act.Difficulty == ActDifficulty.Hard) {
+			if (act.Difficulty != ActDifficulty.Easy) {
 				//activate the selection grid
 				SelectionGrid.SetActive (true);
 
@@ -88,6 +121,8 @@ namespace FTC.WhackABear
 					foreach (ColorSelector cs in ColorSelectors) {
 						if (cs.Selected) {
 							BearColor = cs.BearColor;
+							Hammer.SetColor (BearColor);
+							cs.Pop ();
 							pickedColor = true;
 							break;
 						}
@@ -95,38 +130,12 @@ namespace FTC.WhackABear
 					yield return null;
 				}
 
-				//make the selectors pop
-				//tell the hammer what color we're using
-				foreach (ColorSelector cs in ColorSelectors) {
-					cs.Pop ();
-					Hammer.SetColor (BearColor);
-					yield return null;
-				}
 			} else {
 				//otherwise just wait for player to pick up the hammer
 				//wait for the player to pick up the hammer
 				while (!Hammer.Interactable.IsAttached) {
 					yield return null;
 				}
-			}
-
-			//turn on the correct boxes
-			switch (act.Difficulty) {
-			case ActDifficulty.Easy:
-			default:
-				ToyBoxes [0].gameObject.SetActive (true);
-				break;
-
-			case ActDifficulty.Medium:
-				ToyBoxes [3].gameObject.SetActive (true);
-				ToyBoxes [4].gameObject.SetActive (true);
-				break;
-
-			case ActDifficulty.Hard:
-				ToyBoxes [0].gameObject.SetActive (true);
-				ToyBoxes [1].gameObject.SetActive (true);
-				ToyBoxes [2].gameObject.SetActive (true);
-				break;
 			}
 
 			//drop the boxes
@@ -138,22 +147,22 @@ namespace FTC.WhackABear
 				if (t.gameObject.activeSelf) {
 					t.TotalDuration = act.TimeToComplete;
 					t.Drop ();
+					//destroy the remaining color selectors
+					foreach (ColorSelector c in ColorSelectors) {
+						c.Pop ();
+					}
 				}
 				DropBoxesAnimation.gameObject.GetComponent <AudioSource> ().Play ();
 			}
 			//let the dust settle
 			yield return new WaitForSeconds (0.5f);
 
-			//tell all the toyboxes to start
-			//also point the spotlights at the active toyboxes
-			List<Transform> activeToyboxes = new List<Transform> ();
-			for (int i = 0; i < ToyBoxes.Length; i++) {
-				if (ToyBoxes [i].gameObject.activeSelf) {
-					activeToyboxes.Add (ToyBoxes [i].transform);
-					ToyBoxes [i].PopUpBears ();
+			//bonk down the starting bits
+			foreach (ToyBox t in ToyBoxes) {
+				if (t.gameObject.activeSelf) {
+					yield return act.StartCoroutine (t.PopDownPieces ());
 				}
 			}
-			Spotlights.Current.SetTargets (activeToyboxes.ToArray (), false);
 
 			//start the act!
 			act.ActBegin ();
@@ -162,7 +171,27 @@ namespace FTC.WhackABear
 
 		public override IEnumerator ActUpdateOverTime ()
 		{
+			//tell all the toyboxes to start
+			//also point the spotlights at the active toyboxes
+			List<ToyBox> activeToyboxes = new List<ToyBox> ();
+			List<Transform> toyboxTransforms = new List<Transform> ();
+			for (int i = 0; i < ToyBoxes.Length; i++) {
+				if (ToyBoxes [i].gameObject.activeSelf) {
+					activeToyboxes.Add (ToyBoxes [i]);
+					toyboxTransforms.Add (ToyBoxes [i].transform);
+					ToyBoxes [i].SetBearColor (BearColor);
+				}
+			}
+			Spotlights.Current.SetTargets (toyboxTransforms.ToArray (), false);
+
 			while (act.TimeSoFar < act.TimeToComplete) {
+				//choose a random toybox for popping up a bear (will always be 0 on easy)
+				int randomToybox = UnityEngine.Random.Range (0, activeToyboxes.Count);
+				var task = activeToyboxes [randomToybox].DoPatternSet (act.NormalizedTimeSoFar, MetalBearOdds);
+				while (task.MoveNext ()) {
+					yield return task.Current;
+				}
+
 				//if the hammer gets broken, the act is over
 				if (Hammer.IsBroken) {
 					act.Boo ();

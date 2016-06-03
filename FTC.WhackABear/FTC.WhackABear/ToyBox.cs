@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using System;
 using FTC.Core;
 
-namespace FTC.WhackABear {
+namespace FTC.WhackABear
+{
 	public class ToyBox : FtcBehaviourScript
 	{
 		//using a class for these so we can serialize in inspector
@@ -13,12 +14,14 @@ namespace FTC.WhackABear {
 		[Serializable]
 		public class ToyBoxPieceOdds
 		{
-			public ToyBoxPieceOdds () {
+			public ToyBoxPieceOdds ()
+			{
 				NumItems = 0;
 				Odds = 0f;
 			}
 
-			public ToyBoxPieceOdds (int numItems, float odds) {
+			public ToyBoxPieceOdds (int numItems, float odds)
+			{
 				NumItems = numItems;
 				Odds = odds;
 			}
@@ -34,50 +37,69 @@ namespace FTC.WhackABear {
 			}
 		}
 
+		public static float TimePerBearMultiplier = 1.55f;
+
 		public ToyBoxPiece[] ToyBoxPieces;
 		public Transform[] BearSpawnPoints;
 		public GameObject[] BearPrefabs;
 		public GameObject MetalBearPrefab;
+		public GameObject TargetBearPrefab;
 		public List<ToyBoxPieceOdds> NumPiecesOddsStart;
 		public List<ToyBoxPieceOdds> NumPiecesOddsEnd;
 		public AnimationCurve NumPiecesBlendCurve;
 		public AnimationCurve MetalBearOddsCurve;
 		public AnimationCurve TimePerBearMultiplierCurve;
 		public GameObject ParticleImpactPrefab;
-		public float TimePerBearMultiplier = 1.25f;
+		public GameObject RubberBands;
 		public float[] TimePerBearStart;
 		public float[] TimePerBearEnd;
-		public float MetalBearOdds = 0.1f;
 		public float TotalDuration = 60f;
 		public List<ToyBoxPieceOdds> numPiecesOdds = new List<ToyBoxPieceOdds> ();
 		public List<float> timePerBear = new List<float> ();
 		float nudgeDelay = 0.1f;
-		float timeStarted = 0f;
-		float lastTimeSpawned;
+		float timeStarted = -1f;
+		float lastTimeSpawned = -1f;
 		HashSet<int> currentPieces = new HashSet<int> ();
 		bool stopped = false;
+		Animation waitAnim;
+		protected GummyBearColor bearColor;
+		Rigidbody[] rigidbodies;
 
 		public override void OnEnable ()
 		{
-			TimePerBearStart = new float[6] { 0.1f, 0.1f, 0.1f, 0.09f, 0.08f, 0.07f };
-			TimePerBearEnd = new float[6] { 0.1f, 0.09f, 0.08f, 0.07f, 0.06f, 0.05f };
+			TimePerBearStart = new float[] { 
+				0.1f,
+				0.07f,
+				0.0633f,
+				0.055f,
+				0.04f,
+				0.0325f
+			};
+			TimePerBearEnd = new float[] { 
+				0.1f,
+				0.05f,
+				0.04f,
+				0.025f,
+				0.01f,
+				0.005f
+			};
 			timePerBear = new List<float> (6) { 0f, 0f, 0f, 0f, 0f, 0f };
 
 			NumPiecesOddsStart = new List<ToyBoxPieceOdds> ();
-			NumPiecesOddsStart.Add (new ToyBoxPieceOdds (1, 0.823f));
-			NumPiecesOddsStart.Add (new ToyBoxPieceOdds (2, 0.316f));
-			NumPiecesOddsStart.Add (new ToyBoxPieceOdds (3, 0.037f));
-			NumPiecesOddsStart.Add (new ToyBoxPieceOdds (4, 0.0f));
-			NumPiecesOddsStart.Add (new ToyBoxPieceOdds (5, 0.0f));
+			NumPiecesOddsStart.Add (new ToyBoxPieceOdds (1, 0.123f));
+			NumPiecesOddsStart.Add (new ToyBoxPieceOdds (2, 0.416f));
+			NumPiecesOddsStart.Add (new ToyBoxPieceOdds (3, 0.137f));
+			NumPiecesOddsStart.Add (new ToyBoxPieceOdds (4, 0.02f));
+			NumPiecesOddsStart.Add (new ToyBoxPieceOdds (5, 0.01f));
 			NumPiecesOddsStart.Add (new ToyBoxPieceOdds (6, 0.0f));
 
 			NumPiecesOddsEnd = new List<ToyBoxPieceOdds> ();
-			NumPiecesOddsEnd.Add (new ToyBoxPieceOdds (1, 0.125f));
-			NumPiecesOddsEnd.Add (new ToyBoxPieceOdds (2, 0.275f));
-			NumPiecesOddsEnd.Add (new ToyBoxPieceOdds (3, 0.664f));
+			NumPiecesOddsEnd.Add (new ToyBoxPieceOdds (1, 0.225f));
+			NumPiecesOddsEnd.Add (new ToyBoxPieceOdds (2, 0.375f));
+			NumPiecesOddsEnd.Add (new ToyBoxPieceOdds (3, 0.564f));
 			NumPiecesOddsEnd.Add (new ToyBoxPieceOdds (4, 0.643f));
-			NumPiecesOddsEnd.Add (new ToyBoxPieceOdds (5, 0.202f));
-			NumPiecesOddsEnd.Add (new ToyBoxPieceOdds (6, 0.029f));
+			NumPiecesOddsEnd.Add (new ToyBoxPieceOdds (5, 0.012f));
+			NumPiecesOddsEnd.Add (new ToyBoxPieceOdds (6, 0.129f));
 
 			FtcDependencies d = gameObject.GetComponent <FtcDependencies> ();
 			ToyBoxPieces = new ToyBoxPiece[] {
@@ -105,6 +127,7 @@ namespace FTC.WhackABear {
 				d.GetDependency <GameObject> ("GummyBearRed"),
 			};
 
+			RubberBands = d.GetDependency <GameObject> ("RubberBands");
 			ParticleImpactPrefab = d.GetDependency <GameObject> ("ParticleImpactPrefab");
 			MetalBearPrefab = d.GetDependency <GameObject> ("GummyBearMetal");
 
@@ -143,6 +166,22 @@ namespace FTC.WhackABear {
 			for (int i = 0; i < NumPiecesOddsEnd.Count; i++) {
 				NumPiecesOddsEnd [i].Odds /= cumulativeOdds;
 			}
+			//disable collisions initially
+			rigidbodies = transform.GetComponentsInChildren <Rigidbody> ();
+			for (int i = 0; i < rigidbodies.Length; i++) {
+				rigidbodies [i].detectCollisions = false;
+			}
+		}
+
+		public void SetBearColor (GummyBearColor newbearColor)
+		{
+			bearColor = newbearColor;
+			foreach (GameObject bearPrefab in BearPrefabs) {
+				if (bearPrefab.name.Contains (bearColor.ToString ())) {
+					TargetBearPrefab = bearPrefab;
+					return;
+				}
+			}
 		}
 
 		public void OnBearSquashed (GummyBear bear)
@@ -159,161 +198,189 @@ namespace FTC.WhackABear {
 			ToyBoxPieces [bear.PieceIndex].anim.Play ("ToyBoxPieceDown");
 		}
 
-		public void PopUpBears () {
-			behaviour.StartCoroutine (PopUpBearsOverTime ());
-		}
-
-		public void Stop () {
+		public void Stop ()
+		{
 			stopped = true;
 		}
 
-		public void Drop () {
+		public void Drop ()
+		{
 			GameObject.Instantiate (ParticleImpactPrefab, transform.position, Quaternion.identity);
+			for (int i = 0; i < rigidbodies.Length; i++) {
+				rigidbodies [i].detectCollisions = true;
+			}
+			//'snap' the rubber bands
+			RubberBands.SetActive (false);
 		}
 
-		IEnumerator DoPatternSet (int iterations, float normalizedTime, float metalBearOdds)
+		public IEnumerator PopDownPieces ( ) {
+			for (int i = 0; i < ToyBoxPieces.Length; i++) {
+				ToyBoxPieces [i].BonkDown ();
+				yield return new WaitForSeconds (0.02f);
+			}
+			yield break;
+		}
+
+		public IEnumerator DoPatternSet (float normalizedTime, float metalBearOdds)
 		{
+			if (lastTimeSpawned < 0) {
+				lastTimeSpawned = Time.time;
+			}
+			if (timeStarted < 0) {
+				timeStarted = Time.time;
+			}
+
 			//this gives a rhythm to each pattern set
 			int numPiecesMid = GetNumberOfPieces (normalizedTime);
 			int numPiecesMin = Mathf.Clamp (numPiecesMid - 1, 1, ToyBoxPieces.Length);
 			float timePerIteration = numPiecesMin
-			                          * GetTimePerBear (normalizedTime, numPiecesMid)
-			                          * TimePerBearMultiplierCurve.Evaluate (normalizedTime)
-			                          * TimePerBearMultiplier;
-			//vary the time per iteration a bit so each pattern set has a consistent 'feel'
-			timePerIteration *= UnityEngine.Random.Range (0.9f, 1.1f);
+			                         * GetTimePerBear (normalizedTime, numPiecesMid)
+			                         * TimePerBearMultiplierCurve.Evaluate (normalizedTime)
+			                         * TimePerBearMultiplier;
 			int numPiecesMax = Mathf.Clamp (numPiecesMin, numPiecesMin + 1, ToyBoxPieces.Length);
 
-			for (int x = 0; x < iterations; x++) {
+			if (stopped)
+				yield break;
+
+			//see how many we'll put up each iteration
+			int numPieces = UnityEngine.Random.Range (numPiecesMin, numPiecesMax + 1);//add 1 to the max, it's not a limit
+			//----start a new iteration----//
+			//randomly choose them
+			if (numPieces == 1 && currentPieces.Count < ToyBoxPieces.Length) {
+				//if we only have one
+				//and we didn't show ALL of them last time
+				//make sure we're picking a different one this time
+				int nextIndex = UnityEngine.Random.Range (0, ToyBoxPieces.Length);
+				while (currentPieces.Contains (nextIndex)) {
+					nextIndex = UnityEngine.Random.Range (0, ToyBoxPieces.Length);
+				}
+				currentPieces.Clear ();
+				currentPieces.Add (nextIndex);
+			} else {
+				currentPieces.Clear ();
+				//add random indexes until we've filled the hashset
+				while (currentPieces.Count < numPieces) {
+					currentPieces.Add (UnityEngine.Random.Range (0, ToyBoxPieces.Length));
+				}
+			}
+
+			//----remove pieces that still have a metal bear----//
+			//(we assume there are none to begin with to keep thing simple)
+			for (int i = 0; i < ToyBoxPieces.Length; i++) {
+				if (ToyBoxPieces [i].Bear != null) {
+					currentPieces.Remove (i);
+				}
+			}
+
+			//----create the bears----//
+			bool spawnedMetalBear = false;
+			int numTargetBears = 0;
+			foreach (int pieceIndex in currentPieces) {
+				//if the piece already has a metal bear
+				//then don't replace it - it's stuck until they magnet it away
+				if (ToyBoxPieces [pieceIndex].Bear != null) {
+					continue;
+				}
+				GameObject newBearGo = null;
+				GummyBear newBear = null;
+				//don't put a metal bear on a spot where there was one last frame
+				//that's to prevent shoving another metal bear onto the hovering magnet
+				if (!ToyBoxPieces [pieceIndex].WasMetalLastRound &&
+				     UnityEngine.Random.value < MetalBearOddsCurve.Evaluate (normalizedTime) &&
+				     !spawnedMetalBear) {
+					newBearGo = GameObject.Instantiate (MetalBearPrefab);
+					newBear = newBearGo.GetComponent <FtcPhysicsBehaviour> ().Script as GummyBear;
+					newBear.IsMetal = true;
+					spawnedMetalBear = true;
+				} else {
+					if (numTargetBears < 1 && UnityEngine.Random.value < 0.75f) {
+						//we want to make sure the player has at least one bear prefab that matches the target color
+						newBearGo = GameObject.Instantiate (TargetBearPrefab);
+						numTargetBears++;
+					} else {
+						GameObject prefab = BearPrefabs [UnityEngine.Random.Range (0, BearPrefabs.Length)];
+						//don't spawn more than two target bears
+						while (prefab == TargetBearPrefab && numTargetBears >= 2) {
+							prefab = BearPrefabs [UnityEngine.Random.Range (0, BearPrefabs.Length)];
+						}
+						if (prefab == TargetBearPrefab) {
+							numTargetBears++;
+						}
+						newBearGo = GameObject.Instantiate (prefab);
+					}
+					newBear = newBearGo.GetComponent <FtcPhysicsBehaviour> ().Script as GummyBear;
+					newBear.IsMetal = false;
+				}
+				newBearGo.transform.parent = BearSpawnPoints [pieceIndex];
+				newBearGo.transform.localPosition = Vector3.zero;
+				newBearGo.transform.localRotation = Quaternion.identity;
+				newBear.PieceIndex = pieceIndex;
+				newBear.ToyBoxParent = this;
+				lastTimeSpawned = Time.time;
+				ToyBoxPieces [pieceIndex].WasMetalLastRound = newBear.IsMetal;
+				ToyBoxPieces [pieceIndex].anim.Play ("ToyBoxPieceUp");
+				ToyBoxPieces [pieceIndex].Bear = newBear;
+			}
+			//play the sounds with offsets
+			foreach (int pieceIndex in currentPieces) {
+				//play the sound
+				ToyBoxPieces [pieceIndex].audio.pitch = UnityEngine.Random.Range (0.8f, 1.2f);
+				ToyBoxPieces [pieceIndex].audio.Play ();
+				yield return new WaitForSeconds (UnityEngine.Random.Range (0.01f, 0.05f));
+			}
+			//wait until the bears are ready to be hit, then activate them
+			while (Time.time < lastTimeSpawned + nudgeDelay) {
+				yield return null;
+			}
+			foreach (ToyBoxPiece piece in ToyBoxPieces) {
+				if (piece.Bear != null) {
+					piece.Bear.IsReady = true;
+				}
+			}
+
+			//----wait----//
+			while (Time.time < lastTimeSpawned + timePerIteration) {
 
 				if (stopped)
 					yield break;
 
-				//see how many we'll put up each iteration
-				int numPieces = UnityEngine.Random.Range (numPiecesMin, numPiecesMax + 1);//add 1 to the max, it's not a limit
-				//----start a new iteration----//
-				//randomly choose them
-				if (numPieces == 1 && currentPieces.Count < ToyBoxPieces.Length) {
-					//if we only have one
-					//and we didn't show ALL of them last time
-					//make sure we're picking a different one this time
-					int nextIndex = UnityEngine.Random.Range (0, ToyBoxPieces.Length);
-					while (currentPieces.Contains (nextIndex)) {
-						nextIndex = UnityEngine.Random.Range (0, ToyBoxPieces.Length);
-					}
-					currentPieces.Clear ();
-					currentPieces.Add (nextIndex);
-				} else {
-					currentPieces.Clear ();
-					//add random indexes until we've filled the hashset
-					while (currentPieces.Count < numPieces) {
-						currentPieces.Add (UnityEngine.Random.Range (0, ToyBoxPieces.Length));
-					}
-				}
-
-				//----remove pieces that still have a metal bear----//
-				//(we assume there are none to begin with to keep thing simple)
-				for (int i = 0; i < ToyBoxPieces.Length; i++) {
-					if (ToyBoxPieces [i].Bear != null) {
-						currentPieces.Remove (i);
-					}
-				}
-
-				//----create the bears----//
-				bool spawnedMetalBear = false;
-				foreach (int pieceIndex in currentPieces) {
-					//if the piece already has a metal bear
-					//then don't replace it - it's stuck until they magnet it away
-					if (ToyBoxPieces [pieceIndex].Bear != null) {
-						continue;
-					}
-					GameObject newBearGo = null;
-					GummyBear newBear = null;
-					//don't put a metal bear on a spot where there was one last frame
-					//that's to prevent shoving another metal bear onto the hovering magnet
-					if (!ToyBoxPieces [pieceIndex].WasMetalLastRound &&
-					     UnityEngine.Random.value < MetalBearOddsCurve.Evaluate (normalizedTime) &&
-					     !spawnedMetalBear) {
-						newBearGo = GameObject.Instantiate (MetalBearPrefab);
-						newBear = newBearGo.GetComponent <FtcPhysicsBehaviour> ().Script as GummyBear;
-						newBear.IsMetal = true;
-						spawnedMetalBear = true;
-					} else {
-						newBearGo = GameObject.Instantiate (BearPrefabs [UnityEngine.Random.Range (0, BearPrefabs.Length)]);
-						newBear = newBearGo.GetComponent <FtcPhysicsBehaviour> ().Script as GummyBear;
-						newBear.IsMetal = false;
-					}
-					newBearGo.transform.parent = BearSpawnPoints [pieceIndex];
-					newBearGo.transform.localPosition = Vector3.zero;
-					newBearGo.transform.localRotation = Quaternion.Euler (0f, UnityEngine.Random.Range (-10f, 10f), 0f);
-					newBear.PieceIndex = pieceIndex;
-					newBear.ToyBoxParent = this;
-					lastTimeSpawned = Time.time;
-					ToyBoxPieces [pieceIndex].WasMetalLastRound = newBear.IsMetal;
-					ToyBoxPieces [pieceIndex].anim.Play ("ToyBoxPieceUp");
-					ToyBoxPieces [pieceIndex].Bear = newBear;
-				}
-				//play the sounds with offsets
-				foreach (int pieceIndex in currentPieces) {
-					//play the sound
-					ToyBoxPieces [pieceIndex].audio.pitch = UnityEngine.Random.Range (0.8f, 1.2f);
-					ToyBoxPieces [pieceIndex].audio.Play ();
-					yield return new WaitForSeconds (UnityEngine.Random.Range (0.01f, 0.05f));
-				}
-				//wait until the bears are ready to be hit, then activate them
-				while (Time.time < lastTimeSpawned + nudgeDelay) {
-					yield return null;
-				}
-				foreach (ToyBoxPiece piece in ToyBoxPieces) {
-					if (piece.Bear != null) {
-						piece.Bear.IsReady = true;
-					}
-				}
-
-				//----wait----//
-				while (Time.time < lastTimeSpawned + timePerIteration) {
-
-					if (stopped)
-						yield break;
-
-					yield return null;
-				}
-
-				//----wrap up iteration----//
-				//we can't hit them any more
-				foreach (ToyBoxPiece piece in ToyBoxPieces) {
-					if (piece.Bear != null) {
-						piece.Bear.IsReady = false;
-					}
-				}
-				//make them all go away
-				Animation waitAnim = null;
-				foreach (int pieceIndex in currentPieces) {
-					//TEMP - don't wait for metal bears any more
-					//if (ToyBoxPieces [pieceIndex].Bear == null || !ToyBoxPieces [pieceIndex].Bear.IsMetal) {
-					if (ToyBoxPieces [pieceIndex].Bear != null) {
-						if (!ToyBoxPieces [pieceIndex].anim.IsPlaying ("ToyBoxPieceDown")) {
-							waitAnim = ToyBoxPieces [pieceIndex].anim;
-							waitAnim.Play ("ToyBoxPieceDown");
-						}
-					}
-				}
-				if (waitAnim != null) {
-					//wait for animation to finish before destroying bears
-					while (waitAnim ["ToyBoxPieceDown"].normalizedTime < 1f) {
-						yield return null;
-					}
-				}
-				//once we're done, destroy all the bears we've got
-				foreach (ToyBoxPiece piece in ToyBoxPieces) {
-					//if we're on hard difficulty, don't drop metal
-					//TEMP - we're dropping them anyway
-					if (piece.Bear != null) {// && !piece.Bear.IsMetal) {
-						GameObject.Destroy (piece.Bear.gameObject);
-						piece.Bear = null;
-					}
-				}
 				yield return null;
+			}
+
+			//----wrap up iteration----//
+			//we can't hit them any more
+			foreach (ToyBoxPiece piece in ToyBoxPieces) {
+				if (piece.Bear != null) {
+					piece.Bear.IsReady = false;
+				}
+			}
+			//make them all go away
+			waitAnim = null;
+			foreach (int pieceIndex in currentPieces) {
+				//TEMP - don't wait for metal bears any more
+				//if (ToyBoxPieces [pieceIndex].Bear == null || !ToyBoxPieces [pieceIndex].Bear.IsMetal) {
+				if (ToyBoxPieces [pieceIndex].Bear != null) {
+					if (!ToyBoxPieces [pieceIndex].anim.IsPlaying ("ToyBoxPieceDown")) {
+						waitAnim = ToyBoxPieces [pieceIndex].anim;
+						waitAnim.Play ("ToyBoxPieceDown");
+					}
+				}
+			}
+			yield return null;
+			if (waitAnim != null) {
+				//wait for animation to finish before destroying bears
+				while (waitAnim ["ToyBoxPieceDown"].normalizedTime < 1f) {
+					yield return null;
+				}
+			}
+			//once we're done, destroy all the bears we've got
+			foreach (ToyBoxPiece piece in ToyBoxPieces) {
+				//if we're on hard difficulty, don't drop metal
+				//TEMP - we're dropping them anyway
+				if (piece.Bear != null) {// && !piece.Bear.IsMetal) {
+					GameObject.Destroy (piece.Bear.gameObject);
+					piece.Bear = null;
+				}
 			}
 
 			yield break;
@@ -359,29 +426,6 @@ namespace FTC.WhackABear {
 				}
 			}
 			return numPieces;
-		}
-
-		IEnumerator PopUpBearsOverTime ()
-		{
-			for (int i = 0; i < ToyBoxPieces.Length; i++) {
-				ToyBoxPieces [i].BonkDown ();
-				yield return new WaitForSeconds (UnityEngine.Random.value * 0.1f);
-			}
-			timeStarted = Time.time;
-			lastTimeSpawned = Time.time;
-			while (Time.time - timeStarted < TotalDuration) {
-
-				if (stopped)
-					yield break;
-
-				int iterations = UnityEngine.Random.Range (2, 5);
-				float normalizedTime = ((Time.time - timeStarted) / TotalDuration);
-				var task = DoPatternSet (iterations, normalizedTime, MetalBearOdds);
-				while (task.MoveNext ()) {
-					yield return task.Current;
-				}
-				yield return null;
-			}
 		}
 	}
 }

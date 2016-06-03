@@ -17,6 +17,8 @@ ModelImporter:
     100018: ToyBoxPiece2
     100020: ToyBoxPiece3
     100022: ToyBoxPiece4
+    100024: ToyBoxRubberBand
+    100026: 'Texture Group '
     400000: GummyBear
     400002: GummyBearDetail
     400004: GummyBearDetail_MeshPart0
@@ -29,6 +31,8 @@ ModelImporter:
     400018: ToyBoxPiece2
     400020: ToyBoxPiece3
     400022: ToyBoxPiece4
+    400024: ToyBoxRubberBand
+    400026: 'Texture Group '
     2300000: GummyBear
     2300002: GummyBearDetail_MeshPart0
     2300004: GummyBearDetail_MeshPart1
@@ -38,6 +42,7 @@ ModelImporter:
     2300012: ToyBoxPiece2
     2300014: ToyBoxPiece3
     2300016: ToyBoxPiece4
+    2300018: ToyBoxRubberBand
     3300000: GummyBear
     3300002: GummyBearDetail_MeshPart0
     3300004: GummyBearDetail_MeshPart1
@@ -47,6 +52,7 @@ ModelImporter:
     3300012: ToyBoxPiece2
     3300014: ToyBoxPiece3
     3300016: ToyBoxPiece4
+    3300018: ToyBoxRubberBand
     4300000: GummyBear
     4300002: GummyBearDetail_MeshPart0
     4300004: GummyBearDetail_MeshPart1
@@ -56,6 +62,7 @@ ModelImporter:
     4300012: ToyBoxPiece2
     4300014: ToyBoxPiece3
     4300016: ToyBoxPiece4
+    4300018: ToyBoxRubberBand
     7400000: modo_Anim
     9500000: //RootNode
   materials:

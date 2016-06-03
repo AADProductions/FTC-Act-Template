@@ -23,7 +23,10 @@ namespace FTC.WhackABear {
 		public Transform BackTransform;
 		public AudioClip CrackClip;
 		public AudioClip BreakClip;
+		public Vector3 CenterOfMass = new Vector3 (0f, 0.75f, 0f);
 		Material [] hammerMats;
+		float lastTimeHit;
+		float minTimeHit = 0.25f;
 
 		public override void OnEnable ()
 		{
@@ -39,6 +42,9 @@ namespace FTC.WhackABear {
 			Interactable = gameObject.GetComponent (typeof(INVRInteractable)) as INVRInteractable;
 
 			hammerMats = gameObject.GetComponent <Renderer> ().materials;
+
+			Rigidbody rb = gameObject.GetComponent <Rigidbody> ();
+			rb.centerOfMass = CenterOfMass;
 		}
 
 		public void SetColor (GummyBearColor newBearColor) {
@@ -53,6 +59,11 @@ namespace FTC.WhackABear {
 		}
 
 		public void Crack () {
+			if (Time.time < lastTimeHit + minTimeHit)
+				return;
+
+			lastTimeHit = Time.time;
+
 			NumCracks++;
 			foreach (Material mat in hammerMats) {
 				mat.SetTexture ("DetailMask", null);

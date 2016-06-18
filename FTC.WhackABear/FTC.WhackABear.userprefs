@@ -1,13 +1,15 @@
 ﻿<Properties StartupItem="FTC.WhackABear\FTC.WhackABear.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="FTC.WhackABear\ToyBox.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="FTC.WhackABear\Properties\AssemblyInfo.cs">
     <Files>
-      <File FileName="FTC.WhackABear\Hammer.cs" Line="26" Column="53" />
+      <File FileName="FTC.WhackABear\Hammer.cs" Line="1" Column="1" />
       <File FileName="FTC.WhackABear\LittleMagnet.cs" Line="1" Column="1" />
-      <File FileName="FTC.WhackABear\ToyBox.cs" Line="212" Column="29" />
-      <File FileName="FTC.WhackABear\WhackABearAct.cs" Line="93" Column="47" />
+      <File FileName="FTC.WhackABear\ToyBox.cs" Line="1" Column="1" />
+      <File FileName="FTC.WhackABear\WhackABearAct.cs" Line="1" Column="1" />
       <File FileName="FTC.WhackABear\GummyBear.cs" Line="1" Column="1" />
-      <File FileName="FTC.WhackABear\ColorSelector.cs" Line="39" Column="5" />
+      <File FileName="FTC.WhackABear\ColorSelector.cs" Line="1" Column="1" />
+      <File FileName="FTC.WhackABear\ToyBoxPiece.cs" Line="1" Column="1" />
+      <File FileName="FTC.WhackABear\Properties\AssemblyInfo.cs" Line="12" Column="51" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

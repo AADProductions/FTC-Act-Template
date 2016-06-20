@@ -184,6 +184,10 @@ namespace FTC.WhackABear
 			}
 		}
 
+		public void Finish () {
+			behaviour.StartCoroutine (FinishOverTime ());
+		}
+
 		public void OnBearSquashed (GummyBear bear)
 		{
 			//remove the piece index from the list
@@ -211,6 +215,14 @@ namespace FTC.WhackABear
 			}
 			//'snap' the rubber bands
 			RubberBands.SetActive (false);
+		}
+
+		public IEnumerator FinishOverTime () {
+			for (int i = 0; i < ToyBoxPieces.Length; i++) {
+				ToyBoxPieces [i].PopUp ();
+				yield return new WaitForSeconds (0.02f);
+			}
+			yield break;
 		}
 
 		public IEnumerator PopDownPieces ( ) {

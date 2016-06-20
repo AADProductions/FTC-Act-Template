@@ -14,6 +14,15 @@ namespace FTC.WhackABear {
 
 	public class GummyBear : FtcBehaviourScript
 	{
+		//global stats used for scoring bonuses
+		public static int NumBearsSpawned = 0;
+		public static int NumBearsSquashed = 0;
+		public static int NumWrongColors = 0;
+		public static int NumMetalBearsHit = 0;
+		public static int NumWrongTouched = 0;
+		public static float QuickestSquashTime = Mathf.Infinity;
+		public static float LastTimeSquashed = 0f;
+
 		public bool IsMetal = false;
 		public bool IsReady = false;
 		public bool Squashed = false;
@@ -25,6 +34,8 @@ namespace FTC.WhackABear {
 		public ToyBox ToyBoxParent;
 		public AudioClip MetalBangClip;
 		public AudioClip SquashClip;
+		public AudioClip SquashFailClip;
+		public AudioClip PopClip;
 		public GameObject ParticleBlobsPrefab;
 		public int PieceIndex;
 		float nextHapticPulseTime;
@@ -34,15 +45,25 @@ namespace FTC.WhackABear {
 		Rigidbody rb;
 		Color bearColor;
 
+		public void Pop () {
+			if (!Squashed) {
+				GameObject.Instantiate (ParticleBlobsPrefab, transform.position, Quaternion.identity);
+				AudioSource.PlayClipAtPoint (PopClip, transform.position);
+			}
+			GameObject.Destroy (gameObject);
+		}
+
 		public override void OnEnable ()
 		{
 			ColorSelector.GetColorFromName (gameObject.name, out BearColor, out bearColor);
 
-			FtcDependencies dependencies = gameObject.GetComponent <FtcDependencies> ();
-			SquashedMesh = dependencies.GetDependency <Mesh> ("GummyBearSquished");
-			SquashClip = dependencies.GetDependency <AudioClip> ("BearSquashClip");
-			MetalBangClip = dependencies.GetDependency <AudioClip> ("MetalBangClip");
-			ParticleBlobsPrefab = dependencies.GetDependency <GameObject> ("ParticleBlobsPrefab");
+			FtcDependencies d = gameObject.GetComponent <FtcDependencies> ();
+			SquashedMesh = d.GetDependency <Mesh> ("GummyBearSquished");
+			SquashClip = d.GetDependency <AudioClip> ("BearSquashClip");
+			SquashFailClip = d.GetDependency <AudioClip> ("BearSquashFailClip");
+			MetalBangClip = d.GetDependency <AudioClip> ("MetalBangClip");
+			PopClip = d.GetDependency <AudioClip> ("PopClip");
+			ParticleBlobsPrefab = d.GetDependency <GameObject> ("ParticleBlobsPrefab");
 		}
 
 		public override void Start ()
@@ -65,6 +86,12 @@ namespace FTC.WhackABear {
 				audio.pitch = Random.Range (0.9f, 1.1f);
 				audio.timeSamples = Random.Range (0, audio.clip.samples);
 				audio.Play ();
+			}
+
+			if (Act.Current.Difficulty == ActDifficulty.Easy) {
+				NumBearsSpawned++;
+			} else {
+				//only count as 'spawned' if it's the right color
 			}
 		}
 
@@ -93,6 +120,7 @@ namespace FTC.WhackABear {
 			}
 
 			if (IsMetal) {
+				NumMetalBearsHit++;
 				Clang ();
 				if (interactable != null && interactable.IsAttached) {
 					nextHapticPulseScale += 1200;
@@ -125,9 +153,20 @@ namespace FTC.WhackABear {
 				}
 			}
 
-			if (canSquash && IsReady && collisionMagnitude > MinCollisionMagnitude && dot > MinCollisionDot) {
-				nextHapticPulseScale += 1200;
-				Squash ();
+			if (canSquash && IsReady && dot > MinCollisionDot) {
+				if (collisionMagnitude > MinCollisionMagnitude) {
+					nextHapticPulseScale += 1200;
+					Squash ();
+				} else {
+					//this counts as a 'touch' but not a squash
+					//if we're using colors then bump up num wrong touched
+					if (Act.Current.Difficulty != ActDifficulty.Easy) {
+						WhackABearAct act = Act.Current.Script as WhackABearAct;
+						if (act.BearColor != BearColor) {
+							NumWrongTouched++;
+						}
+					}
+				}
 			}
 		}
 
@@ -169,7 +208,6 @@ namespace FTC.WhackABear {
 
 		void Attach (Rigidbody toBody)
 		{
-			Debug.Log ("Attaching");
 			Attached = true;
 			//become a new 'end'
 			//parent it under the activation object (so it will be turned off correctly)
@@ -201,11 +239,28 @@ namespace FTC.WhackABear {
 			AudioSource audio = gameObject.GetComponent <AudioSource> ();
 			audio.Stop ();
 
-			WhackABearAct act = Act.Current.Script as WhackABearAct;
-			if (act.BearColor == BearColor) {
+			//record fast squish stat
+			float timeBetweenSquashes = LastTimeSquashed - Time.time;
+			LastTimeSquashed = Time.time;
+			QuickestSquashTime = Mathf.Min (timeBetweenSquashes, QuickestSquashTime);
+
+			if (Act.Current.Difficulty == ActDifficulty.Easy) {
+				//there are no colors on easy, just squash
+				AudioSource.PlayClipAtPoint (SquashClip, transform.position);
 				Act.Current.Cheer ();
+				NumBearsSquashed++;
 			} else {
-				Act.Current.Boo ();
+				//on med/hard, you have to hit the right color
+				WhackABearAct act = Act.Current.Script as WhackABearAct;
+				if (act.BearColor == BearColor) {
+					AudioSource.PlayClipAtPoint (SquashClip, transform.position);
+					Act.Current.Cheer ();
+					NumBearsSquashed++;
+				} else {
+					AudioSource.PlayClipAtPoint (SquashFailClip, transform.position);
+					Act.Current.Boo ();
+					NumWrongColors++;
+				}
 			}
 
 			gameObject.GetComponent<Collider> ().enabled = false;
@@ -215,7 +270,6 @@ namespace FTC.WhackABear {
 			r.material.color = bearColor;
 
 			Squashed = true;
-			AudioSource.PlayClipAtPoint (SquashClip, transform.position);
 			gameObject.GetComponent <MeshFilter> ().sharedMesh = SquashedMesh;
 			ToyBoxParent.OnBearSquashed (this);
 		}

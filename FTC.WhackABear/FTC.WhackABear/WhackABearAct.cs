@@ -25,11 +25,11 @@ namespace FTC.WhackABear
 		public static ActBonus [] GetBonusDefinitions () {
 			ActBonus [] bonuses = new ActBonus [5];
 			ActClassInfo actInfo = new ActClassInfo ("FTC.WhackABear.WhackABearAct", "FTC.WhackABear");
-			bonuses [0] = new ActBonus ("Bonus 1", "Bonus 1 Description", ActDifficulty.None, actInfo.ActKey, 0);
-			bonuses [1] = new ActBonus ("Bonus 2", "Bonus 2 Description", ActDifficulty.None, actInfo.ActKey, 1);
-			bonuses [2] = new ActBonus ("Bonus 3", "Bonus 3 Description", ActDifficulty.None, actInfo.ActKey, 2);
-			bonuses [3] = new ActBonus ("Bonus 4", "Bonus 4 Description", ActDifficulty.None, actInfo.ActKey, 3);
-			bonuses [4] = new ActBonus ("Bonus 5", "Bonus 5 Description", ActDifficulty.None, actInfo.ActKey, 4);
+			bonuses [0] = new ActBonus ("MajorityOfBearsSquashed", "9/10 Bears Squashed", ActDifficulty.None, actInfo.ActKey, 0);
+			bonuses [1] = new ActBonus ("NoWrongColorsSquashed", "No Wrong Colors Squashed", ActDifficulty.None, actInfo.ActKey, 1);
+			bonuses [2] = new ActBonus ("NoMetalBearsHit", "No Metal Bears Hit", ActDifficulty.None, actInfo.ActKey, 2);
+			bonuses [3] = new ActBonus ("QuickSquish", "Quick-Squisher!", ActDifficulty.None, actInfo.ActKey, 3);
+			bonuses [4] = new ActBonus ("NoWrongColorsTouched", "No Wrong Colors Touched", ActDifficulty.None, actInfo.ActKey, 4);
 
 			return bonuses;
 		}
@@ -59,14 +59,24 @@ namespace FTC.WhackABear
 
 		public override IEnumerator ActIntroduceOverTime ()
 		{
+			//reset our global gummy bear sats
+			GummyBear.NumBearsSpawned = 0;
+			GummyBear.NumBearsSquashed = 0;
+			GummyBear.NumWrongColors = 0;
+			GummyBear.NumMetalBearsHit = 0;
+			GummyBear.NumWrongTouched = 0;
+			GummyBear.QuickestSquashTime = Mathf.Infinity;
+			GummyBear.LastTimeSquashed = 0f;
+
 			//turn on the correct boxes
 			//set the score per cheer & score loss speed
 			switch (act.Difficulty) {
 			case ActDifficulty.Easy:
 			default:
-				act.ScorePerCheer = 0.2f;
+				//
+				act.TimeToComplete = 60;
+				act.ScorePerCheer = 0.01225f;//substantially lower since every bear hits
 				act.ScoreLoseSpeed = 0.0075f;
-				//ToyBoxes [0].gameObject.SetActive (true);
 				ToyBoxes [1].gameObject.SetActive (false);
 				ToyBoxes [2].gameObject.SetActive (false);
 				ToyBoxes [3].gameObject.SetActive (false);
@@ -74,21 +84,18 @@ namespace FTC.WhackABear
 				break;
 
 			case ActDifficulty.Medium:
+				act.TimeToComplete = 75;
 				act.ScorePerCheer = 0.0925f;
 				act.ScoreLoseSpeed = 0.055f;
 				ToyBoxes [0].gameObject.SetActive (false);
 				ToyBoxes [1].gameObject.SetActive (false);
 				ToyBoxes [2].gameObject.SetActive (false);
-				//ToyBoxes [3].gameObject.SetActive (true);
-				//ToyBoxes [4].gameObject.SetActive (true);
 				break;
 
 			case ActDifficulty.Hard:
+				act.TimeToComplete = 75;
 				act.ScorePerCheer = 0.0125f;
 				act.ScoreLoseSpeed = 0.055f;
-				//ToyBoxes [0].gameObject.SetActive (true);
-				//ToyBoxes [1].gameObject.SetActive (true);
-				//ToyBoxes [2].gameObject.SetActive (true);
 				ToyBoxes [3].gameObject.SetActive (false);
 				ToyBoxes [4].gameObject.SetActive (false);
 				break;
@@ -133,7 +140,7 @@ namespace FTC.WhackABear
 			} else {
 				//otherwise just wait for player to pick up the hammer
 				//wait for the player to pick up the hammer
-				while (!Hammer.Interactable.IsAttached) {
+				while (!Hammer.Interactable.IsAttached || (TutorialDialog.ShowTutorials && TutorialDialog.Current != null)) {
 					yield return null;
 				}
 			}
@@ -182,6 +189,7 @@ namespace FTC.WhackABear
 					ToyBoxes [i].SetBearColor (BearColor);
 				}
 			}
+			Spotlights.Current.SetCeilingTarget (null);
 			Spotlights.Current.SetTargets (toyboxTransforms.ToArray (), false);
 
 			while (act.TimeSoFar < act.TimeToComplete) {
@@ -194,6 +202,7 @@ namespace FTC.WhackABear
 
 				//if the hammer gets broken, the act is over
 				if (Hammer.IsBroken) {
+					act.Gasp ();
 					act.Boo ();
 					foreach (ToyBox t in ToyBoxes) {
 						t.Stop ();
@@ -207,8 +216,32 @@ namespace FTC.WhackABear
 				}
 				yield return null;
 			}
+			foreach (ToyBox tb in activeToyboxes) {
+				tb.Finish ();
+			}
 			act.ActScore ();
 			yield break;
+		}
+
+		public override void PrepareForScoring ()
+		{
+			base.PrepareForScoring ();
+
+			if (GummyBear.NumWrongColors == 0) {
+				act.AchieveBonus ("NoWrongColorsSquashed");
+			}
+			if (GummyBear.NumWrongTouched == 0) {
+				act.AchieveBonus ("NoWrongColorsTouched");
+			}
+			if (GummyBear.NumMetalBearsHit == 0) {
+				act.AchieveBonus ("NoMetalBearsHit");
+			}
+			if (GummyBear.QuickestSquashTime < 0.25f) {
+				act.AchieveBonus ("QuickSquish");
+			}
+			if (((float)GummyBear.NumBearsSquashed / (float)GummyBear.NumBearsSpawned) >= 0.9f) {
+				act.AchieveBonus ("MajorityOfBearsSquashed");
+			}
 		}
 	}
 }

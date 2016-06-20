@@ -29,12 +29,16 @@ namespace FTC.WhackABear
 			AudioSource a = gameObject.GetComponent <AudioSource> ();
 			a.pitch = Random.Range (0.9f, 1.1f);
 			a.PlayOneShot (PopClip);
-			gameObject.SetActive (false);
+			gameObject.GetComponent <Collider> ().enabled = false;
+			gameObject.GetComponent <Renderer> ().enabled = false;
 		}
 
 		public override void OnCollisionEnter (Collision collision)
 		{
-			if (collision.relativeVelocity.magnitude > 0.1f) {
+			if (TutorialDialog.Current != null && !TutorialDialog.Current.PlayedOnce)
+				return;
+
+			if (collision.contacts [0].otherCollider.CompareTag ("Player") && collision.relativeVelocity.magnitude > 0.1f) {
 				Selected = true;
 			}
 		}

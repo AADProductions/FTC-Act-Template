@@ -17,6 +17,15 @@ namespace FTC.WhackABear {
 			anim = gameObject.GetComponent <Animation> ();
 		}
 
+		public void PopUp () {
+			if (Bear != null) {
+				Bear.Pop ();
+			}
+			audio.pitch = Random.Range (0.9f, 1.1f);
+			audio.Play ();
+			anim.Play ("ToyBoxPieceUp");
+		}
+
 		public void BonkDown () {
 			BonkedDown = true;
 			audio.pitch = Random.Range (0.9f, 1.1f);

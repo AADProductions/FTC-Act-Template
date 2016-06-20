@@ -57,6 +57,7 @@
     <Compile Include="ToyBox.cs" />
     <Compile Include="ToyBoxPiece.cs" />
     <Compile Include="ColorSelector.cs" />
+    <Compile Include="GummyBearTut.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

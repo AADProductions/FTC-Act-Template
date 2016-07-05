@@ -29,7 +29,7 @@ namespace FTC
 			if (other.CompareTag ("Player")) {
 				NVRHand h = other.GetComponent <NVRHand> ();
 				if (h != null) {
-					h.Controller.TriggerHapticPulse (500);
+					h.TriggerHapticPulse (500);
 					lastPushTime = Time.time;
 					GetComponent <Button> ().onClick.Invoke ();
 				}
